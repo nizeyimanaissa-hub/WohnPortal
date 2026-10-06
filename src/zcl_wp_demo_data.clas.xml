@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_HELLO_RAP_W</CLSNAME>
+    <CLSNAME>ZCL_WP_DEMO_DATA</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Hello World</DESCRIPT>
+    <DESCRIPT>Demo data class</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
