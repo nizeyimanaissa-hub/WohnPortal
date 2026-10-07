@@ -1,0 +1,5 @@
+@EndUserText.label: 'Portfolio service'
+define service ZWP_UI_PORTFOLIO {
+  expose ZWP_C_Building  as Building;
+  expose ZWP_C_Apartment as Apartment;
+}

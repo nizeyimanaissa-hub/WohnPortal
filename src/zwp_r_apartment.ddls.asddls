@@ -2,7 +2,8 @@
 @EndUserText.label: 'Apartment'
 define view entity ZWP_R_Apartment
   as select from zwp_apartment
-  association to parent ZWP_R_Building as _Building on $projection.ParentUUID = _Building.BuildingUUID
+  association        to parent ZWP_R_Building as _Building   on $projection.ParentUUID = _Building.BuildingUUID
+  association [0..1] to ZWP_I_AptStatusVH     as _StatusText on $projection.Status = _StatusText.Status
 {
   key apartment_uuid              as ApartmentUUID,
       parent_uuid                 as ParentUUID,
@@ -31,5 +32,6 @@ define view entity ZWP_R_Apartment
       @Semantics.systemDateTime.lastChangedAt: true
       last_changed_at             as LastChangedAt,
 
-      _Building
+      _Building,
+      _StatusText
 }

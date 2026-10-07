@@ -1,0 +1,63 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Apartment',
+    typeNamePlural: 'Apartments',
+    title: { type: #STANDARD, value: 'ApartmentID' }
+  }
+}
+annotate view ZWP_C_Apartment with
+{
+  @UI.facet: [
+    { id: 'ApartmentDetails', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Apartment', position: 10 }
+  ]
+  @UI.hidden: true
+  ApartmentUUID;
+  @UI.hidden: true
+  ParentUUID;
+
+  @EndUserText.label: 'Apartment'
+  @UI: { lineItem: [{ position: 10 }], identification: [{ position: 10 }] }
+  ApartmentID;
+
+  @EndUserText.label: 'Floor'
+  @UI: { lineItem: [{ position: 20 }], identification: [{ position: 20 }] }
+  Floor;
+
+  @EndUserText.label: 'Rooms'
+  @UI: { lineItem: [{ position: 30 }], identification: [{ position: 30 }] }
+  Rooms;
+
+  @EndUserText.label: 'Living space'
+  @UI: { lineItem: [{ position: 40 }], identification: [{ position: 40 }] }
+  LivingSpace;
+
+  @EndUserText.label: 'Base rent'
+  @UI: { lineItem: [{ position: 50 }], identification: [{ position: 50 }] }
+  BaseRent;
+
+  @EndUserText.label: 'Service charges'
+  @UI: { lineItem: [{ position: 60 }], identification: [{ position: 60 }] }
+  ServiceCharges;
+
+  @EndUserText.label: 'Warm rent'
+  @UI: { lineItem: [{ position: 70 }], identification: [{ position: 70 }] }
+  WarmRent;
+
+  @EndUserText.label: 'Status'
+  @UI: { lineItem: [{ position: 80 }], identification: [{ position: 80 }], textArrangement: #TEXT_ONLY }
+  Status;
+
+  @UI.hidden: true
+  StatusText;
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LocalLastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

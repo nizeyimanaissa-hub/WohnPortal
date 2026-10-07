@@ -1,0 +1,29 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for ZWP_C_Building alias Building
+use etag
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use association _Apartment { create; with draft; }
+}
+
+define behavior for ZWP_C_Apartment alias Apartment
+use etag
+{
+  use update;
+  use delete;
+
+  use association _Building { with draft; }
+}

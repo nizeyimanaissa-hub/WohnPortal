@@ -1,0 +1,57 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Building',
+    typeNamePlural: 'Buildings',
+    title:       { type: #STANDARD, value: 'Name' },
+    description: { type: #STANDARD, value: 'BuildingID' }
+  }
+}
+annotate view ZWP_C_Building with
+{
+  @UI.facet: [
+    { id: 'BuildingDetails', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Building', position: 10 },
+    { id: 'Apartments', purpose: #STANDARD, type: #LINEITEM_REFERENCE, label: 'Apartments', position: 20, targetElement: '_Apartment' }
+  ]
+  @UI.hidden: true
+  BuildingUUID;
+
+  @EndUserText.label: 'Building ID'
+  @UI: { lineItem: [{ position: 10 }], identification: [{ position: 10 }], selectionField: [{ position: 10 }] }
+  BuildingID;
+
+  @EndUserText.label: 'Name'
+  @UI: { lineItem: [{ position: 20 }], identification: [{ position: 20 }] }
+  Name;
+
+  @EndUserText.label: 'Street'
+  @UI: { lineItem: [{ position: 30 }], identification: [{ position: 30 }] }
+  Street;
+
+  @EndUserText.label: 'House number'
+  @UI: { identification: [{ position: 40 }] }
+  HouseNumber;
+
+  @EndUserText.label: 'Postal code'
+  @UI: { lineItem: [{ position: 40 }], identification: [{ position: 50 }] }
+  PostalCode;
+
+  @EndUserText.label: 'City'
+  @UI: { lineItem: [{ position: 50 }], identification: [{ position: 60 }], selectionField: [{ position: 20 }] }
+  City;
+
+  @EndUserText.label: 'Year built'
+  @UI: { lineItem: [{ position: 60 }], identification: [{ position: 70 }] }
+  YearBuilt;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LocalLastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

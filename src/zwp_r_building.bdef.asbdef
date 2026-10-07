@@ -1,0 +1,98 @@
+managed implementation in class zbp_wp_r_building unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZWP_R_Building alias Building
+persistent table zwp_building
+draft table zwp_building_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+{
+  create;
+  update;
+  delete;
+  association _Apartment { create; with draft; }
+
+  field ( numbering : managed, readonly ) BuildingUUID;
+  field ( readonly ) BuildingID, CreatedBy, CreatedAt, LocalLastChangedBy, LocalLastChangedAt, LastChangedAt;
+  field ( mandatory ) Name, Street, PostalCode, City;
+
+  determination setBuildingID on modify { create; }
+  validation validatePostalCode on save { create; field PostalCode; }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation validatePostalCode;
+    validation Apartment~validateApartmentValues;
+  }
+
+  mapping for zwp_building corresponding
+    {
+      BuildingUUID       = building_uuid;
+      BuildingID         = building_id;
+      Name               = name;
+      Street             = street;
+      HouseNumber        = house_number;
+      PostalCode         = postal_code;
+      City               = city;
+      YearBuilt          = year_built;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
+
+define behavior for ZWP_R_Apartment alias Apartment
+persistent table zwp_apartment
+draft table zwp_apartment_d
+etag master LocalLastChangedAt
+lock dependent by _Building
+authorization dependent by _Building
+{
+  update;
+  delete;
+  association _Building { with draft; }
+
+  field ( numbering : managed, readonly ) ApartmentUUID;
+  field ( readonly ) ParentUUID, ApartmentID, WarmRent, Status,
+  CreatedBy, CreatedAt, LocalLastChangedBy, LocalLastChangedAt, LastChangedAt;
+  field ( mandatory ) Rooms, LivingSpace, BaseRent, CurrencyCode, AreaUnit;
+
+  determination setDefaults on modify { create; }
+  determination calculateWarmRent on modify { create; field BaseRent, ServiceCharges; }
+  determination setApartmentID on save { create; }
+  validation validateApartmentValues on save { create; field Rooms, LivingSpace, BaseRent, ServiceCharges; }
+
+  side effects
+  {
+    field BaseRent affects field WarmRent;
+    field ServiceCharges affects field WarmRent;
+  }
+
+  mapping for zwp_apartment corresponding
+    {
+      ApartmentUUID      = apartment_uuid;
+      ParentUUID         = parent_uuid;
+      ApartmentID        = apartment_id;
+      Floor              = floor;
+      Rooms              = rooms;
+      LivingSpace        = living_space;
+      AreaUnit           = area_unit;
+      BaseRent           = base_rent;
+      ServiceCharges     = service_charges;
+      CurrencyCode       = currency_code;
+      Status             = status;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
