@@ -68,6 +68,10 @@ authorization dependent by _Building
   determination setDefaults on modify { create; }
   determination calculateWarmRent on modify { create; field BaseRent, ServiceCharges; }
   determination setApartmentID on save { create; }
+
+  action ( authorization : update ) markAsLet;
+  action ( authorization : update ) markAsVacant;
+
   validation validateApartmentValues on save { create; field Rooms, LivingSpace, BaseRent, ServiceCharges; }
 
   side effects

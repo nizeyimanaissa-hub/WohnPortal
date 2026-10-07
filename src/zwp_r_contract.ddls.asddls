@@ -4,6 +4,7 @@ define root view entity ZWP_R_Contract
   as select from zwp_contract
   association [1..1] to ZWP_R_Apartment as _Apartment on $projection.ApartmentUUID = _Apartment.ApartmentUUID
   association [1..1] to ZWP_R_Tenant    as _Tenant    on $projection.TenantUUID = _Tenant.TenantUUID
+  association [0..1] to ZWP_I_ContrStatusVH as _StatusText on $projection.Status        = _StatusText.Status
 {
   key contract_uuid         as ContractUUID,
       contract_id           as ContractID,
@@ -35,5 +36,6 @@ define root view entity ZWP_R_Contract
       last_changed_at       as LastChangedAt,
 
       _Apartment,
-      _Tenant
+      _Tenant,
+      _StatusText
 }

@@ -1,0 +1,48 @@
+managed implementation in class zbp_wp_r_tenant unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZWP_R_Tenant alias Tenant
+persistent table zwp_tenant
+draft table zwp_tenant_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+{
+  create;
+  update;
+  delete;
+
+  field ( numbering : managed, readonly ) TenantUUID;
+  field ( readonly ) TenantID, FullName, CreatedBy, CreatedAt, LocalLastChangedBy, LocalLastChangedAt, LastChangedAt;
+  field ( mandatory ) FirstName, LastName, Email;
+
+  determination setTenantID on save { create; }
+  validation validateEmail on save { create; field Email; }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation validateEmail;
+  }
+
+  mapping for zwp_tenant corresponding
+  {
+    TenantUUID         = tenant_uuid;
+    TenantID           = tenant_id;
+    FirstName          = first_name;
+    LastName           = last_name;
+    Email              = email;
+    Phone              = phone;
+    PreferredLanguage  = preferred_language;
+    AppUser            = app_user;
+    CreatedBy          = created_by;
+    CreatedAt          = created_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalLastChangedAt = local_last_changed_at;
+    LastChangedAt      = last_changed_at;
+  }
+}

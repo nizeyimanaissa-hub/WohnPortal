@@ -2,15 +2,9 @@
 "BASEINFO":
 {
 "FROM":
-[
-"ZWP_CONTRACT"
-],
+[],
 "ASSOCIATED":
-[
-"ZWP_I_CONTRSTATUSVH",
-"ZWP_R_APARTMENT",
-"ZWP_R_TENANT"
-],
+[],
 "BASE":
 [],
 "ANNO_REF":

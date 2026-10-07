@@ -82,6 +82,12 @@ CLASS lhc_apartment DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
     METHODS validateApartmentValues FOR VALIDATE ON SAVE
       IMPORTING keys FOR Apartment~validateApartmentValues.
+
+    METHODS markAsLet FOR MODIFY
+      IMPORTING keys FOR ACTION Apartment~markAsLet.
+
+    METHODS markAsVacant FOR MODIFY
+      IMPORTING keys FOR ACTION Apartment~markAsVacant.
 ENDCLASS.
 
 CLASS lhc_apartment IMPLEMENTATION.
@@ -184,7 +190,7 @@ CLASS lhc_apartment IMPLEMENTATION.
                         %state_area = 'VALIDATE_VALUES'
                         %msg        = new_message_with_text(
                                         severity = if_abap_behv_message=>severity-error
-                                        text     = 'Rooms, living space and base rent must be greater than 0' )
+                                        text = 'Rooms, space and base rent must be above 0' )
                         %path       = VALUE #( building-%is_draft    = apt-%is_draft
                                                building-BuildingUUID = apt-ParentUUID )
                         %element-Rooms       = if_abap_behv=>mk-on
@@ -192,6 +198,20 @@ CLASS lhc_apartment IMPLEMENTATION.
                         %element-BaseRent    = if_abap_behv=>mk-on ) TO reported-apartment.
       ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD markAsLet.
+    MODIFY ENTITIES OF zwp_r_building IN LOCAL MODE
+      ENTITY Apartment
+        UPDATE FIELDS ( Status )
+        WITH VALUE #( FOR key IN keys ( %tky = key-%tky Status = 'L' ) ).
+  ENDMETHOD.
+
+  METHOD markAsVacant.
+    MODIFY ENTITIES OF zwp_r_building IN LOCAL MODE
+      ENTITY Apartment
+        UPDATE FIELDS ( Status )
+        WITH VALUE #( FOR key IN keys ( %tky = key-%tky Status = 'V' ) ).
   ENDMETHOD.
 
 ENDCLASS.

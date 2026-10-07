@@ -1,0 +1,85 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Rental contract',
+    typeNamePlural: 'Rental contracts',
+    title:       { type: #STANDARD, value: 'ContractID' },
+    description: { type: #STANDARD, value: 'TenantName' }
+  }
+}
+annotate view ZWP_C_Contract with
+{
+  @UI.facet: [
+    { id: 'Contract', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Contract', position: 10 }
+  ]
+  @UI.hidden: true
+  ContractUUID;
+
+  @EndUserText.label: 'Contract'
+  @UI: {
+    lineItem: [ { position: 10 },
+                { type: #FOR_ACTION, dataAction: 'activateContract',  label: 'Activate contract', position: 10 },
+                { type: #FOR_ACTION, dataAction: 'terminateContract', label: 'Terminate',         position: 20 } ],
+    identification: [ { position: 10 },
+                      { type: #FOR_ACTION, dataAction: 'activateContract',  label: 'Activate contract', position: 10 },
+                      { type: #FOR_ACTION, dataAction: 'terminateContract', label: 'Terminate',         position: 20 } ],
+    selectionField: [ { position: 10 } ]
+  }
+  ContractID;
+
+  @EndUserText.label: 'Apartment'
+  @UI: { lineItem: [{ position: 20 }], identification: [{ position: 20 }], textArrangement: #TEXT_ONLY }
+  ApartmentUUID;
+
+  @EndUserText.label: 'Tenant'
+  @UI: { lineItem: [{ position: 30 }], identification: [{ position: 30 }], selectionField: [{ position: 30 }], textArrangement: #TEXT_ONLY }
+  TenantUUID;
+
+  @EndUserText.label: 'Start date'
+  @UI: { lineItem: [{ position: 40 }], identification: [{ position: 40 }] }
+  StartDate;
+
+  @EndUserText.label: 'End date'
+  @UI: { lineItem: [{ position: 50 }], identification: [{ position: 50 }] }
+  EndDate;
+
+  @EndUserText.label: 'Monthly rent'
+  @UI: { lineItem: [{ position: 60 }], identification: [{ position: 60 }] }
+  MonthlyRent;
+
+  @EndUserText.label: 'Deposit'
+  @UI: { identification: [{ position: 70 }] }
+  Deposit;
+
+  @EndUserText.label: 'Status'
+  @UI: { lineItem: [{ position: 70, criticality: 'StatusCriticality' }],
+         identification: [{ position: 80, criticality: 'StatusCriticality' }],
+         selectionField: [{ position: 20 }],
+         textArrangement: #TEXT_ONLY }
+  Status;
+
+  @EndUserText.label: 'Notice given on'
+  @UI: { identification: [{ position: 90 }] }
+  NoticeDate;
+
+  @UI.hidden: true
+  ApartmentID;
+  @UI.hidden: true
+  TenantName;
+  @UI.hidden: true
+  StatusText;
+  @UI.hidden: true
+  StatusCriticality;
+  @UI.hidden: true
+  CurrencyCode;
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LocalLastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

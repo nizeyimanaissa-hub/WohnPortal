@@ -1,0 +1,60 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Tenant',
+    typeNamePlural: 'Tenants',
+    title:       { type: #STANDARD, value: 'FullName' },
+    description: { type: #STANDARD, value: 'TenantID' }
+  }
+}
+annotate view ZWP_C_Tenant with
+{
+  @UI.facet: [
+    { id: 'Tenant', purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Tenant', position: 10 }
+  ]
+  @UI.hidden: true
+  TenantUUID;
+
+  @EndUserText.label: 'Tenant ID'
+  @UI: { lineItem: [{ position: 10 }], identification: [{ position: 10 }], selectionField: [{ position: 10 }] }
+  TenantID;
+
+  @EndUserText.label: 'Name'
+  @UI: { lineItem: [{ position: 20 }] }
+  FullName;
+
+  @EndUserText.label: 'First name'
+  @UI: { identification: [{ position: 20 }] }
+  FirstName;
+
+  @EndUserText.label: 'Last name'
+  @UI: { identification: [{ position: 30 }], selectionField: [{ position: 20 }] }
+  LastName;
+
+  @EndUserText.label: 'E-mail'
+  @UI: { lineItem: [{ position: 30 }], identification: [{ position: 40 }] }
+  Email;
+
+  @EndUserText.label: 'Phone'
+  @UI: { lineItem: [{ position: 40 }], identification: [{ position: 50 }] }
+  Phone;
+
+  @EndUserText.label: 'Language'
+  @UI: { identification: [{ position: 60 }] }
+  PreferredLanguage;
+
+  @EndUserText.label: 'App user (BTP login)'
+  @UI: { identification: [{ position: 70 }] }
+  AppUser;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LocalLastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

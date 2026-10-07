@@ -1,0 +1,8 @@
+@EndUserText.label: 'Contract service'
+define service ZWP_UI_CONTRACT {
+  expose ZWP_C_Contract      as Contract;
+  expose ZWP_C_Tenant        as Tenant;
+  expose ZWP_I_ApartmentVH   as ApartmentVH;
+  expose ZWP_I_TenantVH      as TenantVH;
+  expose ZWP_I_ContrStatusVH as ContractStatusVH;
+}

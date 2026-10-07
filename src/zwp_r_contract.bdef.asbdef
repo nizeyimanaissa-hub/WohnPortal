@@ -1,0 +1,66 @@
+managed implementation in class zbp_wp_r_contract unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZWP_R_Contract alias Contract
+persistent table zwp_contract
+draft table zwp_contract_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+{
+  create;
+  update;
+  delete;
+
+  field ( numbering : managed, readonly ) ContractUUID;
+  field ( readonly ) ContractID, Status, StatusCriticality, NoticeDate,
+                     CreatedBy, CreatedAt, LocalLastChangedBy, LocalLastChangedAt, LastChangedAt;
+  field ( mandatory ) ApartmentUUID, TenantUUID, StartDate, MonthlyRent;
+
+  action ( features : instance ) activateContract result [1] $self;
+  action ( features : instance ) terminateContract parameter ZWP_A_TerminateParam result [1] $self;
+
+  determination setDefaults           on modify { create; }
+  determination fillRentFromApartment on modify { field ApartmentUUID; }
+
+  validation validateReferences on save { create; field ApartmentUUID, TenantUUID; }
+  validation validateDates      on save { create; field StartDate, EndDate; }
+  validation validateDeposit    on save { create; field Deposit, ApartmentUUID; }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation validateReferences;
+    validation validateDates;
+    validation validateDeposit;
+  }
+
+  side effects
+  {
+    field ApartmentUUID affects field MonthlyRent, field Deposit, field CurrencyCode;
+  }
+
+  mapping for zwp_contract corresponding
+  {
+    ContractUUID       = contract_uuid;
+    ContractID         = contract_id;
+    ApartmentUUID      = apartment_uuid;
+    TenantUUID         = tenant_uuid;
+    StartDate          = start_date;
+    EndDate            = end_date;
+    MonthlyRent        = monthly_rent;
+    Deposit            = deposit;
+    CurrencyCode       = currency_code;
+    Status             = status;
+    NoticeDate         = notice_date;
+    CreatedBy          = created_by;
+    CreatedAt          = created_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalLastChangedAt = local_last_changed_at;
+    LastChangedAt      = last_changed_at;
+  }
+}
