@@ -2,14 +2,9 @@
 "BASEINFO":
 {
 "FROM":
-[
-"ZWP_REQU_STATUS"
-],
+[],
 "ASSOCIATED":
-[
-"ZWP_I_REQSTATUSVH",
-"ZWP_R_MAINTREQUEST"
-],
+[],
 "BASE":
 [],
 "ANNO_REF":

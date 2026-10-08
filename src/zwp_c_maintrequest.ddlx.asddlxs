@@ -1,0 +1,131 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Maintenance request',
+    typeNamePlural: 'Maintenance requests',
+    title:       { type: #STANDARD, value: 'Title' },
+    description: { type: #STANDARD, value: 'RequestID' }
+  },
+  presentationVariant: [{
+    sortOrder: [ { by: 'Priority', direction: #ASC }, { by: 'DueAt', direction: #ASC } ],
+    visualizations: [{ type: #AS_LINEITEM }]
+  }]
+}
+annotate view ZWP_C_MaintRequest with
+{
+  @UI.facet: [
+    { id: 'Request',  purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE, label: 'Request', position: 10 },
+    { id: 'Dispatch', purpose: #STANDARD, type: #FIELDGROUP_REFERENCE, targetQualifier: 'Dispatch', label: 'Dispatch', position: 20 },
+    { id: 'History',  purpose: #STANDARD, type: #LINEITEM_REFERENCE, targetElement: '_StatusLog', label: 'Status history', position: 30 }
+  ]
+  @UI.hidden: true
+  RequestUUID;
+
+  @EndUserText.label: 'Request'
+  @UI: {
+    lineItem: [ { position: 10 },
+                { type: #FOR_ACTION, dataAction: 'assignTechnician', label: 'Assign technician', position: 10 },
+                { type: #FOR_ACTION, dataAction: 'startWork',        label: 'Start work',        position: 20 },
+                { type: #FOR_ACTION, dataAction: 'complete',         label: 'Complete',          position: 30 },
+                { type: #FOR_ACTION, dataAction: 'reject',           label: 'Reject',            position: 40 } ],
+    identification: [ { position: 10 },
+                      { type: #FOR_ACTION, dataAction: 'assignTechnician', label: 'Assign technician', position: 10 },
+                      { type: #FOR_ACTION, dataAction: 'startWork',        label: 'Start work',        position: 20 },
+                      { type: #FOR_ACTION, dataAction: 'complete',         label: 'Complete',          position: 30 },
+                      { type: #FOR_ACTION, dataAction: 'reject',           label: 'Reject',            position: 40 } ]
+  }
+  RequestID;
+
+  @EndUserText.label: 'Title'
+  @UI: { lineItem: [{ position: 20 }], identification: [{ position: 20 }] }
+  Title;
+
+  @EndUserText.label: 'Category'
+  @UI: { lineItem: [{ position: 30 }], identification: [{ position: 30 }], selectionField: [{ position: 20 }], textArrangement: #TEXT_ONLY }
+  Category;
+
+  @EndUserText.label: 'Priority'
+  @UI: { lineItem: [{ position: 40, criticality: 'PriorityCriticality' }],
+         identification: [{ position: 40, criticality: 'PriorityCriticality' }],
+         selectionField: [{ position: 30 }] }
+  Priority;
+
+  @EndUserText.label: 'Status'
+  @UI: { lineItem: [{ position: 50, criticality: 'StatusCriticality' }],
+         identification: [{ position: 50, criticality: 'StatusCriticality' }],
+         selectionField: [{ position: 10 }],
+         textArrangement: #TEXT_ONLY }
+  Status;
+
+  @EndUserText.label: 'Apartment'
+  @UI: { lineItem: [{ position: 60 }], identification: [{ position: 60 }], textArrangement: #TEXT_ONLY }
+  ApartmentUUID;
+
+  @EndUserText.label: 'City'
+  @UI: { lineItem: [{ position: 70 }], selectionField: [{ position: 40 }] }
+  City;
+
+  @EndUserText.label: 'Tenant'
+  @UI: { identification: [{ position: 70 }], textArrangement: #TEXT_ONLY }
+  TenantUUID;
+
+  @EndUserText.label: 'Description'
+  @UI: { identification: [{ position: 80 }], multiLineText: true }
+  Description;
+
+  @EndUserText.label: 'Reported'
+  @UI: { fieldGroup: [{ qualifier: 'Dispatch', position: 10 }] }
+  ReportedAt;
+
+  @EndUserText.label: 'Due'
+  @UI: { lineItem: [{ position: 80 }], fieldGroup: [{ qualifier: 'Dispatch', position: 20 }] }
+  DueAt;
+
+  @EndUserText.label: 'Overdue'
+  @UI: { lineItem: [{ position: 90, criticality: 'OverdueCriticality' }] }
+  IsOverdue;
+
+  @EndUserText.label: 'Technician'
+  @UI: { lineItem: [{ position: 100 }], fieldGroup: [{ qualifier: 'Dispatch', position: 30 }],
+         selectionField: [{ position: 50 }], textArrangement: #TEXT_ONLY }
+  TechnicianUUID;
+
+  @EndUserText.label: 'Planned date'
+  @UI: { fieldGroup: [{ qualifier: 'Dispatch', position: 40 }] }
+  PlannedDate;
+
+  @EndUserText.label: 'Completed'
+  @UI: { fieldGroup: [{ qualifier: 'Dispatch', position: 50 }] }
+  CompletedAt;
+
+  @EndUserText.label: 'Resolution'
+  @UI: { fieldGroup: [{ qualifier: 'Dispatch', position: 60 }], multiLineText: true }
+  ResolutionNote;
+
+  @UI.hidden: true
+  ApartmentID;
+  @UI.hidden: true
+  TenantName;
+  @UI.hidden: true
+  TechnicianName;
+  @UI.hidden: true
+  CategoryText;
+  @UI.hidden: true
+  StatusText;
+  @UI.hidden: true
+  StatusCriticality;
+  @UI.hidden: true
+  PriorityCriticality;
+  @UI.hidden: true
+  OverdueCriticality;
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LocalLastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

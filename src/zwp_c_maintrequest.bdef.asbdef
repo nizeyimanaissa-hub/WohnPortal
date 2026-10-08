@@ -1,0 +1,31 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for ZWP_C_MaintRequest alias MaintRequest
+use etag
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use action assignTechnician;
+  use action startWork;
+  use action complete;
+  use action reject;
+
+  use association _StatusLog { with draft; }
+}
+
+define behavior for ZWP_C_ReqStatus alias StatusLog
+use etag
+{
+  use association _Request { with draft; }
+}

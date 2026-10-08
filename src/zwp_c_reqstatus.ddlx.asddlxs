@@ -1,0 +1,39 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: { typeName: 'Status change', typeNamePlural: 'Status changes' },
+  presentationVariant: [{ sortOrder: [{ by: 'ChangedAt', direction: #DESC }], visualizations: [{ type: #AS_LINEITEM }] }]
+}
+annotate view ZWP_C_ReqStatus with
+{
+  @UI.hidden: true
+  LogUUID;
+  @UI.hidden: true
+  RequestUUID;
+
+  @EndUserText.label: 'When'
+  @UI: { lineItem: [{ position: 10 }] }
+  ChangedAt;
+
+  @EndUserText.label: 'From'
+  @UI: { lineItem: [{ position: 20 }], textArrangement: #TEXT_ONLY }
+  OldStatus;
+
+  @EndUserText.label: 'To'
+  @UI: { lineItem: [{ position: 30 }], textArrangement: #TEXT_ONLY }
+  NewStatus;
+
+  @EndUserText.label: 'By'
+  @UI: { lineItem: [{ position: 40 }] }
+  ChangedBy;
+
+  @EndUserText.label: 'Note'
+  @UI: { lineItem: [{ position: 50 }] }
+  Note;
+
+  @UI.hidden: true
+  OldStatusText;
+  @UI.hidden: true
+  NewStatusText;
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

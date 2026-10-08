@@ -1,0 +1,10 @@
+@EndUserText.label: 'Maintenance dispatch service'
+define service ZWP_UI_MAINT {
+  expose ZWP_C_MaintRequest as MaintRequest;
+  expose ZWP_C_ReqStatus    as StatusLog;
+  expose ZWP_I_ApartmentVH  as ApartmentVH;
+  expose ZWP_I_TenantVH     as TenantVH;
+  expose ZWP_I_TechnicianVH as TechnicianVH;
+  expose ZWP_I_CategoryVH   as CategoryVH;
+  expose ZWP_I_ReqStatusVH  as RequestStatusVH;
+}

@@ -2,10 +2,12 @@
 @EndUserText.label: 'Maintenance request'
 define root view entity ZWP_R_MaintRequest
   as select from zwp_maint_req
-  composition [0..*] of ZWP_R_ReqStatus  as _StatusLog
-  association [1..1] to ZWP_R_Apartment  as _Apartment  on $projection.ApartmentUUID = _Apartment.ApartmentUUID
-  association [1..1] to ZWP_R_Tenant     as _Tenant     on $projection.TenantUUID = _Tenant.TenantUUID
-  association [0..1] to ZWP_R_Technician as _Technician on $projection.TechnicianUUID = _Technician.TechnicianUUID
+  composition [0..*] of ZWP_R_ReqStatus   as _StatusLog
+  association [1..1] to ZWP_R_Apartment   as _Apartment    on $projection.ApartmentUUID = _Apartment.ApartmentUUID
+  association [1..1] to ZWP_R_Tenant      as _Tenant       on $projection.TenantUUID = _Tenant.TenantUUID
+  association [0..1] to ZWP_R_Technician  as _Technician   on $projection.TechnicianUUID = _Technician.TechnicianUUID
+  association [0..1] to ZWP_I_CategoryVH  as _CategoryText on $projection.Category = _CategoryText.Category
+  association [0..1] to ZWP_I_ReqStatusVH as _StatusText   on $projection.Status = _StatusText.Status
 {
   key request_uuid          as RequestUUID,
       request_id            as RequestID,
@@ -14,6 +16,11 @@ define root view entity ZWP_R_MaintRequest
       technician_uuid       as TechnicianUUID,
       category              as Category,
       priority              as Priority,
+      case priority
+        when 1 then 1   -- red
+        when 2 then 2   -- orange
+        else 0          -- neutral
+      end                   as PriorityCriticality,
       title                 as Title,
       description           as Description,
       status                as Status,
@@ -47,5 +54,7 @@ define root view entity ZWP_R_MaintRequest
       _StatusLog,
       _Apartment,
       _Tenant,
-      _Technician
+      _Technician,
+      _CategoryText,
+      _StatusText
 }

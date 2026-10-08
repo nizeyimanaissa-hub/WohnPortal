@@ -31,6 +31,13 @@ CLASS zcl_wp_demo_data IMPLEMENTATION.
     DELETE FROM zwp_apartment.
     DELETE FROM zwp_building.
 
+    DELETE FROM zwp_reqstatus_d.
+    DELETE FROM zwp_maint_req_d.
+    DELETE FROM zwp_contract_d.
+    DELETE FROM zwp_tenant_d.
+    DELETE FROM zwp_apartment_d.
+    DELETE FROM zwp_building_d.
+
     GET TIME STAMP FIELD now.
 
     TRY.
@@ -125,6 +132,8 @@ CLASS zcl_wp_demo_data IMPLEMENTATION.
           DATA(cat) = cats[ ( r - 1 ) MOD 6 + 1 ].
           DATA(st)  = stats[ ( r - 1 ) MOD 4 + 1 ].
           DATA(request_uuid) = cl_system_uuid=>create_uuid_x16_static( ).
+          DATA(reported) = zcl_wp_sla_calculator=>add_days( timestamp = now days = 0 - ( r MOD 20 ) ).
+          DATA(prio)     = CONV zwp_maint_req-priority( ( r - 1 ) MOD 4 + 1 ).
           APPEND VALUE #( request_uuid    = request_uuid
                           request_id      = |SM-{ r WIDTH = 6 ALIGN = RIGHT PAD = '0' }|
                           apartment_uuid  = apartments[ idx ]-apartment_uuid
@@ -132,11 +141,12 @@ CLASS zcl_wp_demo_data IMPLEMENTATION.
                           technician_uuid = COND #( WHEN st <> `N`
                                                     THEN VALUE #( technicians[ trade = cat ]-technician_uuid OPTIONAL ) )
                           category        = cat
-                          priority        = ( r - 1 ) MOD 4 + 1
+                          priority        = prio
                           title           = |Meldung { r }: { cat }|
                           description     = |Demo-Schadensmeldung Nummer { r }, Kategorie { cat }, bitte prüfen.|
                           status          = st
-                          reported_at     = now
+                          reported_at     = reported
+                          due_at          = zcl_wp_sla_calculator=>due_at( reported_at = reported priority = prio )
                           completed_at    = COND #( WHEN st = `C` THEN now )
                           resolution_note = COND #( WHEN st = `C` THEN `Repariert, Funktion geprüft.` )
                           created_by = sy-uname  created_at = now

@@ -1,0 +1,5 @@
+CLASS zbp_wp_r_maintrequest DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zwp_r_maintrequest.
+ENDCLASS.
+
+CLASS zbp_wp_r_maintrequest IMPLEMENTATION.
+ENDCLASS.
