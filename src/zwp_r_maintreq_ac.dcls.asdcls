@@ -1,0 +1,8 @@
+@EndUserText.label: 'Tenants see their own requests, staff see all'
+@MappingRole: true
+define role ZWP_R_MAINTREQ_AC {
+  grant select on ZWP_R_MaintRequest
+    where TenantAppUser = aspect user
+       or _MyRoles.Role = 'AGENT'
+       or _MyRoles.Role = 'PROPERTY_MGR';
+}

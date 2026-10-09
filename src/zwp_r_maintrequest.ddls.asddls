@@ -1,4 +1,4 @@
-@AccessControl.authorizationCheck: #NOT_REQUIRED
+@AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Maintenance request'
 define root view entity ZWP_R_MaintRequest
   as select from zwp_maint_req
@@ -8,11 +8,13 @@ define root view entity ZWP_R_MaintRequest
   association [0..1] to ZWP_R_Technician  as _Technician   on $projection.TechnicianUUID = _Technician.TechnicianUUID
   association [0..1] to ZWP_I_CategoryVH  as _CategoryText on $projection.Category = _CategoryText.Category
   association [0..1] to ZWP_I_ReqStatusVH as _StatusText   on $projection.Status = _StatusText.Status
+  association [0..*] to ZWP_I_UserRole as _MyRoles on _MyRoles.UserID = $session.user
 {
   key request_uuid          as RequestUUID,
       request_id            as RequestID,
       apartment_uuid        as ApartmentUUID,
       tenant_uuid           as TenantUUID,
+      _Tenant.AppUser       as TenantAppUser,
       technician_uuid       as TechnicianUUID,
       category              as Category,
       priority              as Priority,
@@ -56,5 +58,6 @@ define root view entity ZWP_R_MaintRequest
       _Tenant,
       _Technician,
       _CategoryText,
-      _StatusText
+      _StatusText,
+      _MyRoles
 }

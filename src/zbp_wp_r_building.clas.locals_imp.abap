@@ -13,11 +13,13 @@ ENDCLASS.
 CLASS lhc_building IMPLEMENTATION.
 
   METHOD get_global_authorizations.
-    " Sprint 6 adds real checks. Until then everything is allowed.
-    result = VALUE #( %create      = if_abap_behv=>auth-allowed
-                      %update      = if_abap_behv=>auth-allowed
-                      %delete      = if_abap_behv=>auth-allowed
-                      %action-Edit = if_abap_behv=>auth-allowed ).
+    DATA(ok) = COND #( WHEN zcl_wp_auth=>has_role( zcl_wp_auth=>roles-property_manager ) = abap_true
+                       THEN if_abap_behv=>auth-allowed ELSE if_abap_behv=>auth-unauthorized ).
+
+    result = VALUE #( %create      = ok
+                      %update      = ok
+                      %delete      = ok
+                      %action-Edit = ok ).
   ENDMETHOD.
 
   METHOD setBuildingID.

@@ -1,0 +1,6 @@
+@EndUserText.label: 'Tenant request history: same rules as the base view'
+@MappingRole: true
+define role ZWP_C_MYREQSTATUS {
+  grant select on ZWP_C_MyReqStatus
+    where inheriting conditions from entity ZWP_R_ReqStatus;
+}

@@ -1,0 +1,7 @@
+@EndUserText.label: 'Tenant app service (Mein Zuhause)'
+define service ZWP_UI_TENANTAPP {
+  expose ZWP_I_MyHome      as MyHome;
+  expose ZWP_C_MyRequest   as MyRequest;
+  expose ZWP_C_MyReqStatus as MyRequestStatus;
+  expose ZWP_I_CategoryVH  as CategoryVH;
+}

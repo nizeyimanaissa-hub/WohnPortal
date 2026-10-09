@@ -15,23 +15,24 @@ authorization master ( global )
   association _StatusLog { create; with draft; }
 
   field ( numbering : managed, readonly ) RequestUUID;
-  field ( readonly ) RequestID, Status, StatusCriticality, PriorityCriticality, ReportedAt, DueAt,
-                     TechnicianUUID, PlannedDate, CompletedAt, ResolutionNote,
-                     Attachment, MimeType, FileName,
-                     CreatedBy, CreatedAt, LocalLastChangedBy, LocalLastChangedAt, LastChangedAt;
+  field ( readonly ) RequestID, Status, StatusCriticality, PriorityCriticality, TenantAppUser, ReportedAt, DueAt,
+  TechnicianUUID, PlannedDate, CompletedAt, ResolutionNote,
+  Attachment, MimeType, FileName,
+  CreatedBy, CreatedAt, LocalLastChangedBy, LocalLastChangedAt, LastChangedAt;
   field ( mandatory ) ApartmentUUID, TenantUUID, Category, Title, Description;
 
-  action ( features : instance ) assignTechnician parameter ZWP_A_AssignParam   result [1] $self;
-  action ( features : instance ) startWork                                      result [1] $self;
-  action ( features : instance ) complete         parameter ZWP_A_CompleteParam result [1] $self;
-  action ( features : instance ) reject           parameter ZWP_A_RejectParam   result [1] $self;
+  action ( features : instance ) assignTechnician parameter ZWP_A_AssignParam result [1] $self;
+  action ( features : instance ) startWork result [1] $self;
+  action ( features : instance ) complete parameter ZWP_A_CompleteParam result [1] $self;
+  action ( features : instance ) reject parameter ZWP_A_RejectParam result [1] $self;
 
-  determination setInitialValues   on modify { create; }
+  determination setInitialValues on modify { create; }
+  determination setTenantAndApartment on modify { create; }
   determination setDefaultPriority on modify { field Category; }
-  determination calculateDueDate   on modify { field Priority; }
+  determination calculateDueDate on modify { field Priority; }
 
   validation validateRequiredFields on save { create; field ApartmentUUID, TenantUUID, Category, Title, Priority; }
-  validation validateDescription    on save { create; field Description; }
+  validation validateDescription on save { create; field Description; }
   validation validateTenantContract on save { create; field ApartmentUUID, TenantUUID; }
 
   draft action ( features : instance ) Edit;
@@ -52,31 +53,31 @@ authorization master ( global )
   }
 
   mapping for zwp_maint_req corresponding
-  {
-    RequestUUID        = request_uuid;
-    RequestID          = request_id;
-    ApartmentUUID      = apartment_uuid;
-    TenantUUID         = tenant_uuid;
-    TechnicianUUID     = technician_uuid;
-    Category           = category;
-    Priority           = priority;
-    Title              = title;
-    Description        = description;
-    Status             = status;
-    ReportedAt         = reported_at;
-    DueAt              = due_at;
-    PlannedDate        = planned_date;
-    CompletedAt        = completed_at;
-    ResolutionNote     = resolution_note;
-    Attachment         = attachment;
-    MimeType           = mime_type;
-    FileName           = file_name;
-    CreatedBy          = created_by;
-    CreatedAt          = created_at;
-    LocalLastChangedBy = local_last_changed_by;
-    LocalLastChangedAt = local_last_changed_at;
-    LastChangedAt      = last_changed_at;
-  }
+    {
+      RequestUUID        = request_uuid;
+      RequestID          = request_id;
+      ApartmentUUID      = apartment_uuid;
+      TenantUUID         = tenant_uuid;
+      TechnicianUUID     = technician_uuid;
+      Category           = category;
+      Priority           = priority;
+      Title              = title;
+      Description        = description;
+      Status             = status;
+      ReportedAt         = reported_at;
+      DueAt              = due_at;
+      PlannedDate        = planned_date;
+      CompletedAt        = completed_at;
+      ResolutionNote     = resolution_note;
+      Attachment         = attachment;
+      MimeType           = mime_type;
+      FileName           = file_name;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
 }
 
 define behavior for ZWP_R_ReqStatus alias StatusLog
@@ -87,19 +88,19 @@ lock dependent by _Request
 authorization dependent by _Request
 {
   field ( numbering : managed, readonly ) LogUUID;
-  field ( readonly ) RequestUUID, OldStatus, NewStatus, ChangedBy, ChangedAt, Note, LocalLastChangedAt;
+  field ( readonly ) RequestUUID, OldStatus, NewStatus, ChangedBy, ChangedAt, Note, LocalLastChangedAt, TenantAppUser;
 
   association _Request { with draft; }
 
   mapping for zwp_requ_status corresponding
-  {
-    LogUUID            = log_uuid;
-    RequestUUID        = request_uuid;
-    OldStatus          = old_status;
-    NewStatus          = new_status;
-    ChangedBy          = changed_by;
-    ChangedAt          = changed_at;
-    Note               = note;
-    LocalLastChangedAt = local_last_changed_at;
-  }
+    {
+      LogUUID            = log_uuid;
+      RequestUUID        = request_uuid;
+      OldStatus          = old_status;
+      NewStatus          = new_status;
+      ChangedBy          = changed_by;
+      ChangedAt          = changed_at;
+      Note               = note;
+      LocalLastChangedAt = local_last_changed_at;
+    }
 }

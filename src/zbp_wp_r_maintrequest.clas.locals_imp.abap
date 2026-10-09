@@ -33,6 +33,9 @@ CLASS lhc_maintrequest DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS setDefaultPriority FOR DETERMINE ON MODIFY
       IMPORTING keys FOR MaintRequest~setDefaultPriority.
 
+    METHODS setTenantAndApartment FOR DETERMINE ON MODIFY
+      IMPORTING keys FOR MaintRequest~setTenantAndApartment.
+
     METHODS calculateDueDate FOR DETERMINE ON MODIFY
       IMPORTING keys FOR MaintRequest~calculateDueDate.
 
@@ -59,11 +62,25 @@ ENDCLASS.
 CLASS lhc_maintrequest IMPLEMENTATION.
 
   METHOD get_global_authorizations.
-    " Sprint 6 adds real checks
-    result = VALUE #( %create      = if_abap_behv=>auth-allowed
-                      %update      = if_abap_behv=>auth-allowed
-                      %delete      = if_abap_behv=>auth-allowed
-                      %action-Edit = if_abap_behv=>auth-allowed ).
+    DATA(is_agent)   = zcl_wp_auth=>has_role( zcl_wp_auth=>roles-agent ).
+    DATA(is_tenant)  = zcl_wp_auth=>has_role( zcl_wp_auth=>roles-tenant ).
+    DATA(is_manager) = zcl_wp_auth=>has_role( zcl_wp_auth=>roles-property_manager ).
+
+    DATA(can_create) = COND #( WHEN is_agent = abap_true OR is_tenant = abap_true
+                               THEN if_abap_behv=>auth-allowed ELSE if_abap_behv=>auth-unauthorized ).
+    DATA(can_dispatch) = COND #( WHEN is_agent = abap_true
+                                 THEN if_abap_behv=>auth-allowed ELSE if_abap_behv=>auth-unauthorized ).
+    DATA(can_delete) = COND #( WHEN is_manager = abap_true
+                               THEN if_abap_behv=>auth-allowed ELSE if_abap_behv=>auth-unauthorized ).
+
+    result = VALUE #( %create                  = can_create
+                      %update                  = can_dispatch
+                      %delete                  = can_delete
+                      %action-Edit             = can_dispatch
+                      %action-assignTechnician = can_dispatch
+                      %action-startWork        = can_dispatch
+                      %action-complete         = can_dispatch
+                      %action-reject           = can_dispatch ).
   ENDMETHOD.
 
   METHOD get_instance_features.
@@ -447,14 +464,18 @@ CLASS lhc_maintrequest IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-  METHOD validateTenantContract.
-    " The tenant must have an active contract for exactly this apartment
+    METHOD validateTenantContract.
+    " The tenant must have an active contract for exactly this apartment,
+    " and a tenant-only user may only report for themselves
     READ ENTITIES OF zwp_r_maintrequest IN LOCAL MODE
       ENTITY MaintRequest
         FIELDS ( ApartmentUUID TenantUUID ) WITH CORRESPONDING #( keys )
       RESULT DATA(requests).
 
     CHECK requests IS NOT INITIAL.
+
+    DATA(tenant_only) = zcl_wp_auth=>is_tenant_only( ).
+    DATA(my_tenant)   = COND #( WHEN tenant_only = abap_true THEN zcl_wp_auth=>my_tenant_uuid( ) ).
 
     SELECT FROM zwp_contract
       FIELDS apartment_uuid, tenant_uuid
@@ -469,6 +490,15 @@ CLASS lhc_maintrequest IMPLEMENTATION.
 
       CHECK request-ApartmentUUID IS NOT INITIAL AND request-TenantUUID IS NOT INITIAL.
 
+      IF tenant_only = abap_true AND request-TenantUUID <> my_tenant.
+        APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
+        APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_CONTRACT'
+                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
+                                                      text     = 'You can only report damage for yourself' )
+                        %element-TenantUUID = if_abap_behv=>mk-on ) TO reported-maintrequest.
+        CONTINUE.
+      ENDIF.
+
       IF NOT line_exists( contracts[ apartment_uuid = request-ApartmentUUID tenant_uuid = request-TenantUUID ] ).
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_CONTRACT'
@@ -477,6 +507,32 @@ CLASS lhc_maintrequest IMPLEMENTATION.
                         %element-TenantUUID = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD setTenantAndApartment.
+    " Only for tenants: fill in their own tenant record and the apartment of their active contract
+    CHECK zcl_wp_auth=>is_tenant_only( ) = abap_true.
+
+    DATA(my_tenant) = zcl_wp_auth=>my_tenant_uuid( ).
+    CHECK my_tenant IS NOT INITIAL.
+
+    SELECT SINGLE FROM zwp_contract FIELDS apartment_uuid
+      WHERE tenant_uuid = @my_tenant
+        AND status      = 'A'
+      INTO @DATA(my_apartment).
+
+    READ ENTITIES OF zwp_r_maintrequest IN LOCAL MODE
+      ENTITY MaintRequest
+        FIELDS ( TenantUUID ApartmentUUID ) WITH CORRESPONDING #( keys )
+      RESULT DATA(requests).
+
+    MODIFY ENTITIES OF zwp_r_maintrequest IN LOCAL MODE
+      ENTITY MaintRequest
+        UPDATE FIELDS ( TenantUUID ApartmentUUID )
+        WITH VALUE #( FOR r IN requests
+                      ( %tky          = r-%tky
+                        TenantUUID    = COND #( WHEN r-TenantUUID    IS INITIAL THEN my_tenant    ELSE r-TenantUUID )
+                        ApartmentUUID = COND #( WHEN r-ApartmentUUID IS INITIAL THEN my_apartment ELSE r-ApartmentUUID ) ) ).
   ENDMETHOD.
 
 ENDCLASS.

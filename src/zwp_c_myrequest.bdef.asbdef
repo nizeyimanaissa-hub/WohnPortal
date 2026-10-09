@@ -1,0 +1,16 @@
+projection;
+strict ( 2 );
+
+define behavior for ZWP_C_MyRequest alias MyRequest
+use etag
+{
+  use create;
+
+  use association _StatusLog;
+}
+
+define behavior for ZWP_C_MyReqStatus alias MyStatusLog
+use etag
+{
+  use association _Request;
+}

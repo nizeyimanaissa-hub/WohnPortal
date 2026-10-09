@@ -1,0 +1,6 @@
+@EndUserText.label: 'Tenants see only their own home'
+@MappingRole: true
+define role ZWP_I_MYHOME {
+  grant select on ZWP_I_MyHome
+    where TenantAppUser = aspect user;
+}
