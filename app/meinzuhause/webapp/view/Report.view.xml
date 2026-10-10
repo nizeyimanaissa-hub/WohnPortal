@@ -1,0 +1,87 @@
+<mvc:View
+  controllerName="wohnportal.meinzuhause.controller.Report"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page
+    id="reportPage"
+    title="{i18n>reportTitle}"
+    showNavButton="true"
+    navButtonPress=".onNavBack"
+    busy="{reportView>/busy}">
+    <content>
+      <Wizard
+        id="reportWizard"
+        showNextButton="true"
+        finishButtonText="{i18n>reportSend}"
+        complete=".onWizardComplete"
+        class="sapUiResponsivePadding--header sapUiResponsivePadding--content">
+
+        <!-- Step 1: category, from the backend's category value help -->
+        <WizardStep
+          id="stepCategory"
+          title="{i18n>stepCategory}"
+          validated="{= !!${reportView>/category} }">
+          <List
+            id="categoryList"
+            mode="SingleSelectLeft"
+            items="{ path: '/CategoryVH', templateShareable: false }"
+            selectionChange=".onCategorySelect"
+            noDataText="{i18n>noCategories}">
+            <StandardListItem title="{CategoryText}"/>
+          </List>
+        </WizardStep>
+
+        <!-- Step 2: title and description; the 20-character rule mirrors the backend -->
+        <WizardStep
+          id="stepDetails"
+          title="{i18n>stepDetails}"
+          validated="{= ${reportView>/title}.length > 0 &amp;&amp; ${reportView>/description}.length >= 20 }">
+          <VBox>
+            <Label text="{i18n>fieldTitle}" labelFor="titleInput" required="true"/>
+            <Input
+              id="titleInput"
+              value="{reportView>/title}"
+              valueLiveUpdate="true"
+              maxLength="60"
+              placeholder="{i18n>fieldTitlePlaceholder}"/>
+            <Label
+              text="{i18n>fieldDescription}"
+              labelFor="descriptionInput"
+              required="true"
+              class="sapUiSmallMarginTop"/>
+            <TextArea
+              id="descriptionInput"
+              value="{reportView>/description}"
+              valueLiveUpdate="true"
+              liveChange=".onDescriptionChange"
+              rows="5"
+              width="100%"
+              placeholder="{i18n>fieldDescriptionPlaceholder}"/>
+            <Text text="{reportView>/descriptionHint}" class="sapUiTinyMarginTop"/>
+          </VBox>
+        </WizardStep>
+
+        <!-- Step 3: review before sending -->
+        <WizardStep
+          id="stepReview"
+          title="{i18n>stepReview}"
+          validated="true">
+          <VBox>
+            <Label text="{i18n>fieldCategory}"/>
+            <Text text="{reportView>/categoryText}"/>
+            <Label text="{i18n>fieldTitle}" class="sapUiSmallMarginTop"/>
+            <Text text="{reportView>/title}"/>
+            <Label text="{i18n>fieldDescription}" class="sapUiSmallMarginTop"/>
+            <Text text="{reportView>/description}"/>
+            <MessageStrip
+              text="{i18n>reviewHint}"
+              type="Information"
+              showIcon="true"
+              class="sapUiMediumMarginTop"/>
+          </VBox>
+        </WizardStep>
+
+      </Wizard>
+    </content>
+  </Page>
+</mvc:View>

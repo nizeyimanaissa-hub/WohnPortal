@@ -1,0 +1,70 @@
+<mvc:View
+  controllerName="wohnportal.meinzuhause.controller.Home"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page id="homePage" title="{i18n>homeTitle}">
+    <content>
+      <VBox class="sapUiResponsiveMargin">
+
+        <MessageStrip
+          text="{i18n>homeNoContract}"
+          type="Information"
+          showIcon="true"
+          visible="{= ${homeView>/loaded} &amp;&amp; !${homeView>/hasHome} &amp;&amp; !${homeView>/loadError} }"
+          class="sapUiSmallMarginBottom"/>
+
+        <MessageStrip
+          text="{i18n>loadError}"
+          type="Error"
+          showIcon="true"
+          visible="{homeView>/loadError}"
+          class="sapUiSmallMarginBottom"/>
+
+        <!-- One card per current contract; normally exactly one -->
+        <VBox items="{ path: '/MyHome', templateShareable: false, events: { dataReceived: '.onHomeDataReceived' } }">
+          <items>
+            <ObjectHeader
+              title="{Street} {HouseNumber}"
+              intro="{BuildingName}"
+              responsive="true"
+              backgroundDesign="Solid"
+              class="sapUiSmallMarginBottom">
+              <attributes>
+                <ObjectAttribute text="{PostalCode} {City}"/>
+                <ObjectAttribute title="{i18n>fieldApartment}" text="{ApartmentID}"/>
+                <ObjectAttribute title="{i18n>fieldRooms}" text="{Rooms}"/>
+                <ObjectAttribute title="{i18n>fieldLivingSpace}" text="{LivingSpace} m²"/>
+                <ObjectAttribute title="{i18n>fieldFloor}" text="{Floor}"/>
+                <ObjectAttribute title="{i18n>warmRent}" text="{MonthlyRent} {CurrencyCode}"/>
+                <ObjectAttribute title="{i18n>fieldContract}" text="{ContractID}"/>
+                <ObjectAttribute title="{i18n>fieldSince}" text="{StartDate}"/>
+              </attributes>
+            </ObjectHeader>
+          </items>
+        </VBox>
+
+        <HBox wrap="Wrap" class="sapUiSmallMarginTop">
+          <GenericTile
+            header="{i18n>tileReport}"
+            subheader="{i18n>tileReportSub}"
+            press=".onReport"
+            class="sapUiTinyMarginEnd sapUiTinyMarginBottom">
+            <TileContent>
+              <ImageContent src="sap-icon://wrench"/>
+            </TileContent>
+          </GenericTile>
+          <GenericTile
+            header="{i18n>tileRequests}"
+            subheader="{i18n>tileRequestsSub}"
+            press=".onMyRequests"
+            class="sapUiTinyMarginEnd sapUiTinyMarginBottom">
+            <TileContent>
+              <ImageContent src="sap-icon://activity-items"/>
+            </TileContent>
+          </GenericTile>
+        </HBox>
+
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

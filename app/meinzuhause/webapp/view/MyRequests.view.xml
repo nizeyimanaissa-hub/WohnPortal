@@ -1,0 +1,39 @@
+<mvc:View
+  controllerName="wohnportal.meinzuhause.controller.MyRequests"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page
+    id="myRequestsPage"
+    title="{i18n>myRequestsTitle}"
+    showNavButton="true"
+    navButtonPress=".onNavBack">
+    <headerContent>
+      <Button icon="sap-icon://add" tooltip="{i18n>tileReport}" press=".onReport"/>
+    </headerContent>
+    <content>
+      <PullToRefresh id="pullToRefresh" refresh=".onRefresh" visible="{device>/support/touch}"/>
+      <List
+        id="requestList"
+        items="{ path: '/MyRequest', parameters: { $orderby: 'ReportedAt desc' }, templateShareable: false }"
+        noDataText="{i18n>noRequests}"
+        growing="true"
+        growingThreshold="20">
+        <ObjectListItem
+          title="{Title}"
+          intro="{RequestID}"
+          type="Navigation"
+          press=".onRequestPress">
+          <firstStatus>
+            <ObjectStatus
+              text="{StatusText}"
+              state="{ path: 'StatusCriticality', formatter: '.formatter.statusState' }"/>
+          </firstStatus>
+          <attributes>
+            <ObjectAttribute text="{CategoryText}"/>
+            <ObjectAttribute text="{ReportedAt}"/>
+          </attributes>
+        </ObjectListItem>
+      </List>
+    </content>
+  </Page>
+</mvc:View>

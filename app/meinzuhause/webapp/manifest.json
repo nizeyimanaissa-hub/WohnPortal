@@ -1,0 +1,132 @@
+{
+  "_version": "2.0.0",
+  "sap.app": {
+    "id": "wohnportal.meinzuhause",
+    "type": "application",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [
+        "de",
+        "en"
+      ],
+      "fallbackLocale": "de"
+    },
+    "applicationVersion": {
+      "version": "0.1.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zwp_ui_tenantapp_o4/srvd/sap/zwp_ui_tenantapp/0001/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.136.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "wohnportal.meinzuhause.i18n.i18n",
+          "supportedLocales": [
+            "de",
+            "en"
+          ],
+          "fallbackLocale": "de"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "wohnportal.meinzuhause.view.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "path": "wohnportal.meinzuhause.view",
+        "controlId": "app",
+        "controlAggregation": "pages"
+      },
+      "routes": [
+        {
+          "name": "home",
+          "pattern": "",
+          "target": "home"
+        },
+        {
+          "name": "report",
+          "pattern": "report",
+          "target": "report"
+        },
+        {
+          "name": "myRequests",
+          "pattern": "requests",
+          "target": "myRequests"
+        },
+        {
+          "name": "detail",
+          "pattern": "requests/{requestUuid}",
+          "target": "detail"
+        }
+      ],
+      "targets": {
+        "home": {
+          "id": "home",
+          "name": "Home",
+          "level": 1
+        },
+        "report": {
+          "id": "report",
+          "name": "Report",
+          "level": 2
+        },
+        "myRequests": {
+          "id": "myRequests",
+          "name": "MyRequests",
+          "level": 2
+        },
+        "detail": {
+          "id": "detail",
+          "name": "Detail",
+          "level": 3
+        }
+      }
+    }
+  }
+}

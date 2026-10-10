@@ -1,0 +1,24 @@
+{
+  "generationParameters": {
+    "generationDate": "Sat Oct 10 2026 12:26:47 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP Cloud)",
+    "metadataFilename": "",
+    "serviceUrl": "https://a4796127-12c7-4a21-ae82-e3ced4ab9c3d.abap.us10.hana.ondemand.com/sap/opu/odata4/sap/zwp_ui_tenantapp_o4/srvd/sap/zwp_ui_tenantapp/0001/",
+    "appName": "meinzuhause",
+    "appTitle": "Mein Zuhause",
+    "appDescription": "Tennat App",
+    "appNamespace": "wohnportal",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.148.9",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.33.0",
+    "template": "Basic V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```",
+    "valueHelpDownloaded": true
+  }
+}
