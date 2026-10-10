@@ -1,0 +1,56 @@
+<mvc:View
+  controllerName="wohnportal.meinzuhause.controller.Detail"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page
+    id="detailPage"
+    title="{i18n>detailTitle}"
+    showNavButton="true"
+    navButtonPress=".onNavBack">
+    <content>
+      <ObjectHeader
+        title="{Title}"
+        intro="{RequestID}"
+        responsive="true"
+        backgroundDesign="Solid">
+        <statuses>
+          <ObjectStatus
+            text="{StatusText}"
+            state="{ path: 'StatusCriticality', formatter: '.formatter.statusState' }"/>
+        </statuses>
+        <attributes>
+          <ObjectAttribute title="{i18n>fieldCategory}" text="{CategoryText}"/>
+          <ObjectAttribute title="{i18n>fieldApartment}" text="{ApartmentID}"/>
+          <ObjectAttribute title="{i18n>fieldReported}" text="{ReportedAt}"/>
+          <ObjectAttribute title="{i18n>fieldPlanned}" text="{PlannedDate}" visible="{= !!${PlannedDate} }"/>
+          <ObjectAttribute title="{i18n>fieldTechnician}" text="{TechnicianName}" visible="{= !!${TechnicianName} }"/>
+        </attributes>
+      </ObjectHeader>
+
+      <VBox class="sapUiSmallMargin">
+        <Title text="{i18n>fieldDescription}" level="H3"/>
+        <Text text="{Description}" class="sapUiTinyMarginTop"/>
+        <MessageStrip
+          text="{ResolutionNote}"
+          type="Information"
+          showIcon="true"
+          visible="{= !!${ResolutionNote} }"
+          class="sapUiSmallMarginTop"/>
+      </VBox>
+
+      <!-- Status history: the read-only child entity, newest first -->
+      <List
+        id="historyList"
+        headerText="{i18n>historyTitle}"
+        items="{ path: '_StatusLog', parameters: { $orderby: 'ChangedAt desc' }, templateShareable: false }"
+        noDataText="{i18n>noHistory}"
+        class="sapUiSmallMarginTop">
+        <StandardListItem
+          title="{NewStatusText}"
+          description="{Note}"
+          info="{ChangedAt}"
+          icon="sap-icon://history"/>
+      </List>
+    </content>
+  </Page>
+</mvc:View>
