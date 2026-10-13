@@ -56,9 +56,9 @@ CLASS lhc_tenant IMPLEMENTATION.
         APPEND VALUE #( %tky = tenant-%tky ) TO failed-tenant.
         APPEND VALUE #( %tky           = tenant-%tky
                         %state_area    = 'VALIDATE_EMAIL'
-                        %msg           = new_message_with_text(
-                                           severity = if_abap_behv_message=>severity-error
-                                           text     = 'Enter a valid e-mail address' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                                            number   = zif_wp_msg=>no-email
+                                            severity = if_abap_behv_message=>severity-error )
                         %element-Email = if_abap_behv=>mk-on ) TO reported-tenant.
       ENDIF.
     ENDLOOP.

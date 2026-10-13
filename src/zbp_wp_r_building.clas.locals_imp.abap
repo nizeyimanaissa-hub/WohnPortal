@@ -60,9 +60,9 @@ CLASS lhc_building IMPLEMENTATION.
         APPEND VALUE #( %tky = building-%tky ) TO failed-building.
         APPEND VALUE #( %tky                = building-%tky
                         %state_area         = 'VALIDATE_POSTALCODE'
-                        %msg                = new_message_with_text(
-                                                severity = if_abap_behv_message=>severity-error
-                                                text     = 'The postal code must have exactly 5 digits' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                                            number   = zif_wp_msg=>no-postal_code
+                                            severity = if_abap_behv_message=>severity-error )
                         %element-PostalCode = if_abap_behv=>mk-on ) TO reported-building.
       ENDIF.
     ENDLOOP.
@@ -190,9 +190,9 @@ CLASS lhc_apartment IMPLEMENTATION.
         APPEND VALUE #( %tky = apt-%tky ) TO failed-apartment.
         APPEND VALUE #( %tky        = apt-%tky
                         %state_area = 'VALIDATE_VALUES'
-                        %msg        = new_message_with_text(
-                                        severity = if_abap_behv_message=>severity-error
-                                        text = 'Rooms, space and base rent must be above 0' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                                            number   = zif_wp_msg=>no-apartment_values
+                                            severity = if_abap_behv_message=>severity-error )
                         %path       = VALUE #( building-%is_draft    = apt-%is_draft
                                                building-BuildingUUID = apt-ParentUUID )
                         %element-Rooms       = if_abap_behv=>mk-on

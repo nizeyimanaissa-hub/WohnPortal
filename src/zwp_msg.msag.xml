@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZWP_MSG</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>WohnPortal messages</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>The postal code must have exactly 5 digits</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Rooms, space and base rent must be above 0</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Enter a valid e-mail address</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>The apartment is already let under contract &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Apartment locked: is its building being edited?</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>The end date must be today or later and after the start date</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Choose an apartment</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Choose a tenant</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Enter a start date</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>The end date must be after the start date</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>The deposit may be at most 3 base rents (&amp;1 EUR)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Choose an active technician</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Technician&apos;s trade &amp;1 does not fit category &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>The planned date cannot be in the past</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Enter what was done to fix it</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>Enter a reason for rejecting</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>Choose a category</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Enter a short title</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Priority must be between 1 and 4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Describe the problem in 20 characters or more</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>Tenant has no active contract here</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZWP_MSG</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>You can only report damage for yourself</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

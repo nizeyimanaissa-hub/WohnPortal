@@ -109,9 +109,10 @@ CLASS lhc_contract IMPLEMENTATION.
       IF conflict_id IS NOT INITIAL.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky = contract-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = |Apartment already let: contract { conflict_id }| ) )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-apartment_let
+                               severity = if_abap_behv_message=>severity-error
+                               v1       = conflict_id ) )
           TO reported-contract.
       ELSE.
         APPEND contract TO free_contracts.
@@ -134,9 +135,9 @@ CLASS lhc_contract IMPLEMENTATION.
       IF line_exists( apartment_failed-apartment[ ApartmentUUID = contract-ApartmentUUID ] ).
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky = contract-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'Apartment locked: is its building being edited?' ) )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-apartment_locked
+                               severity = if_abap_behv_message=>severity-error ) )
           TO reported-contract.
       ELSE.
         APPEND VALUE #( %tky = contract-%tky Status = contract_status-active ) TO to_activate.
@@ -173,9 +174,9 @@ CLASS lhc_contract IMPLEMENTATION.
       IF end_date IS INITIAL OR end_date < today OR end_date <= contract-StartDate.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky = contract-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'End date must be today or later, after start' ) )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-end_date_terminate
+                               severity = if_abap_behv_message=>severity-error ) )
           TO reported-contract.
       ELSE.
         APPEND contract TO valid_contracts.
@@ -198,9 +199,9 @@ CLASS lhc_contract IMPLEMENTATION.
       IF line_exists( apartment_failed-apartment[ ApartmentUUID = contract-ApartmentUUID ] ).
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky = contract-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'Apartment locked: is its building being edited?' ) )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-apartment_locked
+                               severity = if_abap_behv_message=>severity-error ) )
           TO reported-contract.
       ELSE.
         APPEND VALUE #( %tky       = contract-%tky
@@ -301,9 +302,9 @@ CLASS lhc_contract IMPLEMENTATION.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky                   = contract-%tky
                         %state_area            = 'VALIDATE_REFERENCES'
-                        %msg                   = new_message_with_text(
-                                                   severity = if_abap_behv_message=>severity-error
-                                                   text     = 'Choose an apartment' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-choose_apartment
+                               severity = if_abap_behv_message=>severity-error )
                         %element-ApartmentUUID = if_abap_behv=>mk-on ) TO reported-contract.
       ENDIF.
 
@@ -311,9 +312,9 @@ CLASS lhc_contract IMPLEMENTATION.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky                = contract-%tky
                         %state_area         = 'VALIDATE_REFERENCES'
-                        %msg                = new_message_with_text(
-                                                severity = if_abap_behv_message=>severity-error
-                                                text     = 'Choose a tenant' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-choose_tenant
+                               severity = if_abap_behv_message=>severity-error )
                         %element-TenantUUID = if_abap_behv=>mk-on ) TO reported-contract.
       ENDIF.
     ENDLOOP.
@@ -332,17 +333,17 @@ CLASS lhc_contract IMPLEMENTATION.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky               = contract-%tky
                         %state_area        = 'VALIDATE_DATES'
-                        %msg               = new_message_with_text(
-                                               severity = if_abap_behv_message=>severity-error
-                                               text     = 'Enter a start date' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-start_date
+                               severity = if_abap_behv_message=>severity-error )
                         %element-StartDate = if_abap_behv=>mk-on ) TO reported-contract.
       ELSEIF contract-EndDate IS NOT INITIAL AND contract-EndDate <= contract-StartDate.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky             = contract-%tky
                         %state_area      = 'VALIDATE_DATES'
-                        %msg             = new_message_with_text(
-                                             severity = if_abap_behv_message=>severity-error
-                                             text     = 'The end date must be after the start date' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-end_after_start
+                               severity = if_abap_behv_message=>severity-error )
                         %element-EndDate = if_abap_behv=>mk-on ) TO reported-contract.
       ENDIF.
     ENDLOOP.
@@ -371,9 +372,10 @@ CLASS lhc_contract IMPLEMENTATION.
         APPEND VALUE #( %tky = contract-%tky ) TO failed-contract.
         APPEND VALUE #( %tky             = contract-%tky
                         %state_area      = 'VALIDATE_DEPOSIT'
-                        %msg             = new_message_with_text(
-                                             severity = if_abap_behv_message=>severity-error
-                                             text     = |Deposit max. 3 base rents ({ apartment-BaseRent * 3 DECIMALS = 2 } EUR)| )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-deposit_max
+                               severity = if_abap_behv_message=>severity-error
+                               v1 = |{ apartment-BaseRent * 3 DECIMALS = 2 }| )
                         %element-Deposit = if_abap_behv=>mk-on ) TO reported-contract.
       ENDIF.
     ENDLOOP.

@@ -9,7 +9,7 @@ CLASS zcl_wp_role_setup IMPLEMENTATION.
     " Edit this list and run with F9 to switch the roles of your own user.
     " All three:   ( `TENANT` ) ( `AGENT` ) ( `PROPERTY_MGR` )
     " Tenant only: ( `TENANT` )
-    DATA(my_roles) = VALUE string_table( ( `TENANT` ) ).
+    DATA(my_roles) = VALUE string_table( ( `TENANT` ) ( `AGENT` ) ( `PROPERTY_MGR` ) ).
 
     DATA rows TYPE STANDARD TABLE OF zwp_user_role WITH EMPTY KEY.
     DATA(user) = zcl_wp_auth=>current_user( ).

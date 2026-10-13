@@ -1,4 +1,5 @@
-CLASS lhc_maintrequest DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS ltc_validations DEFINITION DEFERRED FOR TESTING.
+CLASS lhc_maintrequest DEFINITION INHERITING FROM cl_abap_behavior_handler FRIENDS ltc_validations.
   PRIVATE SECTION.
     CONSTANTS:
       BEGIN OF req_status,
@@ -150,18 +151,21 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF sy-subrc <> 0 OR technician-is_active = abap_false.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'Choose an active technician' ) ) TO reported-maintrequest.
+                        %msg = new_message( id       = zif_wp_msg=>id
+                               number   = zif_wp_msg=>no-active_technician
+                               severity = if_abap_behv_message=>severity-error ) )
+        TO reported-maintrequest.
         CONTINUE.
       ENDIF.
 
       IF technician-trade <> request-Category AND request-Category <> 'OTHER'.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = |Technician trade { technician-trade } does not fit { request-Category }| ) )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-trade_mismatch
+                    severity = if_abap_behv_message=>severity-error
+                    v1       = technician-trade
+                    v2       = request-Category ) )
           TO reported-maintrequest.
         CONTINUE.
       ENDIF.
@@ -169,9 +173,10 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF param-PlannedDate IS NOT INITIAL AND param-PlannedDate < today.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'The planned date cannot be in the past' ) ) TO reported-maintrequest.
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-planned_date_past
+                    severity = if_abap_behv_message=>severity-error ) )
+        TO reported-maintrequest.
         CONTINUE.
       ENDIF.
 
@@ -246,9 +251,10 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF note IS INITIAL.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'Enter what was done to fix it' ) ) TO reported-maintrequest.
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-resolution_note
+                    severity = if_abap_behv_message=>severity-error ) )
+        TO reported-maintrequest.
         CONTINUE.
       ENDIF.
 
@@ -289,9 +295,9 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF reason IS INITIAL.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky
-                        %msg = new_message_with_text(
-                                 severity = if_abap_behv_message=>severity-error
-                                 text     = 'Enter a reason for rejecting' ) ) TO reported-maintrequest.
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-reject_reason
+                    severity = if_abap_behv_message=>severity-error ) ) TO reported-maintrequest.
         CONTINUE.
       ENDIF.
 
@@ -406,40 +412,45 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF request-ApartmentUUID IS INITIAL.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_REQUIRED'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Choose an apartment' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-choose_apartment
+                    severity = if_abap_behv_message=>severity-error )
                         %element-ApartmentUUID = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
 
       IF request-TenantUUID IS INITIAL.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_REQUIRED'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Choose a tenant' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-choose_tenant
+                    severity = if_abap_behv_message=>severity-error )
                         %element-TenantUUID = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
 
       IF request-Category IS INITIAL.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_REQUIRED'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Choose a category' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-choose_category
+                    severity = if_abap_behv_message=>severity-error )
                         %element-Category = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
 
       IF request-Title IS INITIAL.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_REQUIRED'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Enter a short title' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-title
+                    severity = if_abap_behv_message=>severity-error )
                         %element-Title = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
 
       IF request-Priority < 1 OR request-Priority > 4.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_REQUIRED'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Priority must be between 1 and 4' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-priority_range
+                    severity = if_abap_behv_message=>severity-error )
                         %element-Priority = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
     ENDLOOP.
@@ -457,16 +468,15 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF strlen( request-Description ) < 20.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_DESCRIPTION'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Describe the problem in 20 characters or more' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-description
+                    severity = if_abap_behv_message=>severity-error )
                         %element-Description = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
     METHOD validateTenantContract.
-    " The tenant must have an active contract for exactly this apartment,
-    " and a tenant-only user may only report for themselves
     READ ENTITIES OF zwp_r_maintrequest IN LOCAL MODE
       ENTITY MaintRequest
         FIELDS ( ApartmentUUID TenantUUID ) WITH CORRESPONDING #( keys )
@@ -493,8 +503,9 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF tenant_only = abap_true AND request-TenantUUID <> my_tenant.
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_CONTRACT'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'You can only report damage for yourself' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-only_yourself
+                    severity = if_abap_behv_message=>severity-error )
                         %element-TenantUUID = if_abap_behv=>mk-on ) TO reported-maintrequest.
         CONTINUE.
       ENDIF.
@@ -502,15 +513,15 @@ CLASS lhc_maintrequest IMPLEMENTATION.
       IF NOT line_exists( contracts[ apartment_uuid = request-ApartmentUUID tenant_uuid = request-TenantUUID ] ).
         APPEND VALUE #( %tky = request-%tky ) TO failed-maintrequest.
         APPEND VALUE #( %tky = request-%tky %state_area = 'VALIDATE_CONTRACT'
-                        %msg = new_message_with_text( severity = if_abap_behv_message=>severity-error
-                                                      text     = 'Tenant has no active contract here' )
+                        %msg = new_message( id       = zif_wp_msg=>id
+                    number   = zif_wp_msg=>no-no_active_contract
+                    severity = if_abap_behv_message=>severity-error )
                         %element-TenantUUID = if_abap_behv=>mk-on ) TO reported-maintrequest.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
   METHOD setTenantAndApartment.
-    " Only for tenants: fill in their own tenant record and the apartment of their active contract
     CHECK zcl_wp_auth=>is_tenant_only( ) = abap_true.
 
     DATA(my_tenant) = zcl_wp_auth=>my_tenant_uuid( ).
